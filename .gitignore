@@ -1,0 +1,125 @@
+# ==========================================
+# 1. FRONTEND (Next.js / Node.js)
+# ==========================================
+
+# Dependencies
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+frontend/.yarn/
+
+# Next.js
+frontend/.next/
+frontend/.next-profiles/
+frontend/out/
+
+# Build artifacts
+frontend/build/
+frontend/dist/
+
+# TypeScript
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+# Testing
+frontend/coverage/
+frontend/.nyc_output/
+
+# Logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Caches
+frontend/.cache/
+frontend/.turbo/
+frontend/.swc/
+frontend/.eslintcache
+
+# Vercel
+frontend/.vercel/
+
+
+# ==========================================
+# 2. BACKEND (Go)
+# ==========================================
+
+# Binaries
+backend/bin/
+backend/*.exe
+backend/*.exe~
+backend/*.dll
+backend/*.so
+backend/*.dylib
+backend/*.wasm
+
+# Go test artifacts
+backend/*.test
+backend/*.out
+backend/coverage.*
+backend/*.coverprofile
+backend/profile.cov
+backend/__debug_bin*
+
+# Go workspace
+backend/go.work
+backend/go.work.sum
+
+backend/tmp/
+# Local dependencies (only if you don't commit vendor)
+# backend/vendor/
+
+
+# ==========================================
+# 3. ENVIRONMENT & SECRETS
+# ==========================================
+
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+*.pem
+*.key
+
+# ==========================================
+# 4. DOCKER & LOCAL DATA
+# ==========================================
+
+# Local volumes / persistent data
+data/
+docker-data/
+postgres-data/
+
+# ==========================================
+# 5. IDE & EDITORS
+# ==========================================
+
+.idea/
+.vscode/
+.vscode-test/
+
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# ==========================================
+# 6. OPERATING SYSTEM
+# ==========================================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# 7. MISC
+# ==========================================
+
+*.log
+*.tmp
+*.bak
+*~
