@@ -1,4 +1,4 @@
-name: my-web-app
+name: booking-system
 services:
   frontend:
     build:
