@@ -48,8 +48,8 @@ frontend/.vercel/
 
 # Binaries
 backend/bin/
-backend/*.exe
-backend/*.exe~
+*.exe
+*.exe~
 backend/*.dll
 backend/*.so
 backend/*.dylib
