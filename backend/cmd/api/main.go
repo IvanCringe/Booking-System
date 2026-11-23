@@ -17,10 +17,14 @@ func main() {
 
 	//* Создаем пул
 	pool, err := database.NewPostgresPool(cfg)
+	//* Без базы сервер все равно запускается, ошибка пишется в лог
 	if err != nil {
-		log.Fatalf("failed to open pool: %v", err)
+		log.Printf("failed to open pool: %v", err)
 	}
-	defer pool.Close()
+	//* Закрываем пул при остановке, только если он был создан
+	if pool != nil {
+		defer pool.Close()
+	}
 
 	//* Запускаем HTTP-сервер
 	if err := server.Run(cfg); err != nil {
