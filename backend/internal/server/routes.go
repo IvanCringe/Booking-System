@@ -13,5 +13,7 @@ func newRouter() *http.ServeMux {
 	mux.HandleFunc("/health", handler.HealthHandler)
 	//* Корневой маршрут, только точное совпадение пути /
 	mux.HandleFunc("/{$}", handler.RootHandler)
+	//* Все остальные пути: ответ 404 в едином формате
+	mux.HandleFunc("/", handler.NotFoundHandler)
 	return mux
 }
