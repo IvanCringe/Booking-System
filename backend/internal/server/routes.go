@@ -15,5 +15,12 @@ func newRouter() *http.ServeMux {
 	mux.HandleFunc("/{$}", handler.RootHandler)
 	//* Все остальные пути: ответ 404 в едином формате
 	mux.HandleFunc("/", handler.NotFoundHandler)
+	//* Рестораны: список, получение, создание, изменение, удаление
+	mux.HandleFunc("GET /restaurants", handler.ListRestaurants)
+	mux.HandleFunc("GET /restaurants/{id}", handler.GetRestaurant)
+	mux.HandleFunc("POST /restaurants", handler.CreateRestaurant)
+	mux.HandleFunc("PUT /restaurants/{id}", handler.UpdateRestaurant)
+	mux.HandleFunc("DELETE /restaurants/{id}", handler.DeleteRestaurant)
+
 	return mux
 }
