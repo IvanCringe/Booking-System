@@ -17,3 +17,9 @@ func writeJSON(w http.ResponseWriter, status int, data any) {
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(data)
 }
+
+func writeError(w http.ResponseWriter, status int, code, message string) {
+	e := ErrorResponse{Code: code, Message: message}
+	//* writeError отправляет клиенту ошибку в едином формате
+	writeJSON(w, status, e)
+}
