@@ -6,7 +6,7 @@ import (
 	"github.com/IvanCringe/Booking-System/backend/internal/handler"
 )
 
-//* newRouter создает роутер и регистрирует все маршруты API
+// * newRouter создает роутер и регистрирует все маршруты API
 func newRouter() *http.ServeMux {
 	mux := http.NewServeMux()
 	//* Проверка состояния сервера
