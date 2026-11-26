@@ -19,3 +19,13 @@ type RestaurantRepository interface {
 	//* Delete удаляет ресторан по id, при отсутствии domain.ErrNotFound
 	Delete(ctx context.Context, id int64) error
 }
+
+//* RestaurantService содержит бизнес-логику ресторанов и работает с данными через repository
+type RestaurantService struct {
+	repo RestaurantRepository
+}
+
+//* NewRestaurantService создает сервис ресторанов с переданным repository
+func NewRestaurantService(repo RestaurantRepository) *RestaurantService {
+	return &RestaurantService{repo: repo}
+}
