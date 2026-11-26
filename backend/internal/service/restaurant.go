@@ -41,3 +41,8 @@ func (s *RestaurantService) GetByID(ctx context.Context, id int64) (*domain.Rest
 	}
 	return s.repo.GetByID(ctx, id)
 }
+
+//* List возвращает все рестораны
+func (s *RestaurantService) List(ctx context.Context) ([]*domain.Restaurant, error) {
+	return s.repo.List(ctx)
+}
