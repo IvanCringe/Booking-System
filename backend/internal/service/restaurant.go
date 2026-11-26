@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/IvanCringe/Booking-System/backend/internal/domain"
 )
@@ -28,4 +29,15 @@ type RestaurantService struct {
 //* NewRestaurantService создает сервис ресторанов с переданным repository
 func NewRestaurantService(repo RestaurantRepository) *RestaurantService {
 	return &RestaurantService{repo: repo}
+}
+
+//* ErrInvalidID возвращается, когда id ресторана некорректный
+var ErrInvalidID = errors.New("некорректный id")
+
+//* GetByID возвращает ресторан по id, при некорректном id ErrInvalidID
+func (s *RestaurantService) GetByID(ctx context.Context, id int64) (*domain.Restaurant, error) {
+	if id <= 0 {
+		return nil, ErrInvalidID
+	}
+	return s.repo.GetByID(ctx, id)
 }
