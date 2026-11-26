@@ -46,3 +46,11 @@ func (s *RestaurantService) GetByID(ctx context.Context, id int64) (*domain.Rest
 func (s *RestaurantService) List(ctx context.Context) ([]*domain.Restaurant, error) {
 	return s.repo.List(ctx)
 }
+
+//* Delete удаляет ресторан по id, при некорректном id ErrInvalidID
+func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
+	if id <= 0 {
+		return ErrInvalidID
+	}
+	return s.repo.Delete(ctx, id)
+}
