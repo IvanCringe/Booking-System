@@ -73,6 +73,18 @@ func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
 	return s.repo.Delete(ctx, id)
 }
 
+//* Update проверяет id и данные ресторана и обновляет его, id берется из параметра, а не из структуры
+func (s *RestaurantService) Update(ctx context.Context, id int64, restaurant domain.Restaurant) (*domain.Restaurant, error) {
+	if id <= 0 {
+		return nil, ErrInvalidID
+	}
+	if err := validateRestaurant(restaurant); err != nil {
+		return nil, err
+	}
+	restaurant.ID = id
+	return s.repo.Update(ctx, restaurant)
+}
+
 //* isValidPhone проверяет российский номер: 8XXXXXXXXXX или +7XXXXXXXXXX
 func isValidPhone(phone string) bool {
 	var r string
