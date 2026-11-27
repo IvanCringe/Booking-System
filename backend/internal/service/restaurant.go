@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/IvanCringe/Booking-System/backend/internal/domain"
 )
@@ -60,26 +62,49 @@ func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
 //* ErrInvalidRestaurant возвращается, когда данные ресторана не прошли проверку
 var ErrInvalidRestaurant = errors.New("некорректные данные ресторана")
 
-//* maxNameLen, maxAddressLen, maxPhoneLen – лимиты длины полей, как в миграции (в символах)
-const maxNameLen, maxAddressLen, maxPhoneLen = 150, 255, 30
+//* maxNameLen, maxAddressLen – лимиты длины полей, как в миграции (в символах)
+const maxNameLen, maxAddressLen = 150, 255
 
 //* isValidPhone проверяет российский номер: 8XXXXXXXXXX или +7XXXXXXXXXX
 func isValidPhone(phone string) bool {
-	var rest string
+	var r string
 	switch {
 	case strings.HasPrefix(phone, "+7"):
-		rest = phone[2:]
+		r = phone[2:]
 	case strings.HasPrefix(phone, "8"):
-		rest = phone[1:]
+		r = phone[1:]
 	default:
 		return false
 	}
-	if len(rest) != 10 {
+	if len(r) != 10 {
 		return false
 	}
-	_, err := strconv.ParseUint(rest, 10, 64)
+	_, err := strconv.ParseUint(r, 10, 64)
 	if err != nil {
 		return false
 	}
 	return true
+}
+
+//* validateRestaurant проверяет данные ресторана, при ошибке возвращает ErrInvalidRestaurant с пояснением
+func validateRestaurant(r domain.Restaurant) error {
+	if strings.TrimSpace(r.Name) == "" {
+		return fmt.Errorf("%w: имя пустое", ErrInvalidRestaurant)
+	}
+	if utf8.RuneCountInString(r.Name) > maxNameLen {
+		return fmt.Errorf("%w: имя длиннее %d символов", ErrInvalidRestaurant, maxNameLen)
+	}
+	if strings.TrimSpace(r.Address) == "" {
+		return fmt.Errorf("%w: адрес пустой", ErrInvalidRestaurant)
+	}
+	if utf8.RuneCountInString(r.Address) > maxAddressLen {
+		return fmt.Errorf("%w: адрес длиннее %d символов", ErrInvalidRestaurant, maxAddressLen)
+	}
+	if !isValidPhone(r.Phone) {
+		return fmt.Errorf("%w: некорректный формат телефона", ErrInvalidRestaurant)
+	}
+	if r.OwnerId <= 0 {
+		return fmt.Errorf("%w: некорректный владелец", ErrInvalidRestaurant)
+	}
+	return nil
 }
