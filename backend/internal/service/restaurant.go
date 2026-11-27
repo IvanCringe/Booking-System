@@ -59,6 +59,14 @@ func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
 	return s.repo.Delete(ctx, id)
 }
 
+//* Create проверяет данные ресторана и сохраняет его, при некорректных данных ErrInvalidRestaurant
+func (s *RestaurantService) Create(ctx context.Context, restaurant domain.Restaurant) (int64, error) {
+	if err := validateRestaurant(restaurant); err != nil {
+		return 0, err
+	}
+	return s.repo.Create(ctx, restaurant)
+}
+
 //* ErrInvalidRestaurant возвращается, когда данные ресторана не прошли проверку
 var ErrInvalidRestaurant = errors.New("некорректные данные ресторана")
 
