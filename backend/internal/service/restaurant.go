@@ -11,6 +11,15 @@ import (
 	"github.com/IvanCringe/Booking-System/backend/internal/domain"
 )
 
+//* ErrInvalidID возвращается, когда id ресторана некорректный
+var ErrInvalidID = errors.New("некорректный id")
+
+//* ErrInvalidRestaurant возвращается, когда данные ресторана не прошли проверку
+var ErrInvalidRestaurant = errors.New("некорректные данные ресторана")
+
+//* maxNameLen, maxAddressLen – лимиты длины полей, как в миграции (в символах)
+const maxNameLen, maxAddressLen = 150, 255
+
 //* RestaurantRepository описывает, что service нужно от хранилища ресторанов (реализует repository)
 type RestaurantRepository interface {
 	//* GetByID возвращает ресторан по id, при отсутствии domain.ErrNotFound
@@ -35,9 +44,6 @@ func NewRestaurantService(repo RestaurantRepository) *RestaurantService {
 	return &RestaurantService{repo: repo}
 }
 
-//* ErrInvalidID возвращается, когда id ресторана некорректный
-var ErrInvalidID = errors.New("некорректный id")
-
 //* GetByID возвращает ресторан по id, при некорректном id ErrInvalidID
 func (s *RestaurantService) GetByID(ctx context.Context, id int64) (*domain.Restaurant, error) {
 	if id <= 0 {
@@ -51,14 +57,6 @@ func (s *RestaurantService) List(ctx context.Context) ([]*domain.Restaurant, err
 	return s.repo.List(ctx)
 }
 
-//* Delete удаляет ресторан по id, при некорректном id ErrInvalidID
-func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
-	if id <= 0 {
-		return ErrInvalidID
-	}
-	return s.repo.Delete(ctx, id)
-}
-
 //* Create проверяет данные ресторана и сохраняет его, при некорректных данных ErrInvalidRestaurant
 func (s *RestaurantService) Create(ctx context.Context, restaurant domain.Restaurant) (int64, error) {
 	if err := validateRestaurant(restaurant); err != nil {
@@ -67,11 +65,13 @@ func (s *RestaurantService) Create(ctx context.Context, restaurant domain.Restau
 	return s.repo.Create(ctx, restaurant)
 }
 
-//* ErrInvalidRestaurant возвращается, когда данные ресторана не прошли проверку
-var ErrInvalidRestaurant = errors.New("некорректные данные ресторана")
-
-//* maxNameLen, maxAddressLen – лимиты длины полей, как в миграции (в символах)
-const maxNameLen, maxAddressLen = 150, 255
+//* Delete удаляет ресторан по id, при некорректном id ErrInvalidID
+func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
+	if id <= 0 {
+		return ErrInvalidID
+	}
+	return s.repo.Delete(ctx, id)
+}
 
 //* isValidPhone проверяет российский номер: 8XXXXXXXXXX или +7XXXXXXXXXX
 func isValidPhone(phone string) bool {
