@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"errors"
+	"strconv"
+	"strings"
 
 	"github.com/IvanCringe/Booking-System/backend/internal/domain"
 )
@@ -53,4 +55,31 @@ func (s *RestaurantService) Delete(ctx context.Context, id int64) error {
 		return ErrInvalidID
 	}
 	return s.repo.Delete(ctx, id)
+}
+
+//* ErrInvalidRestaurant возвращается, когда данные ресторана не прошли проверку
+var ErrInvalidRestaurant = errors.New("некорректные данные ресторана")
+
+//* maxNameLen, maxAddressLen, maxPhoneLen – лимиты длины полей, как в миграции (в символах)
+const maxNameLen, maxAddressLen, maxPhoneLen = 150, 255, 30
+
+//* isValidPhone проверяет российский номер: 8XXXXXXXXXX или +7XXXXXXXXXX
+func isValidPhone(phone string) bool {
+	var rest string
+	switch {
+	case strings.HasPrefix(phone, "+7"):
+		rest = phone[2:]
+	case strings.HasPrefix(phone, "8"):
+		rest = phone[1:]
+	default:
+		return false
+	}
+	if len(rest) != 10 {
+		return false
+	}
+	_, err := strconv.ParseUint(rest, 10, 64)
+	if err != nil {
+		return false
+	}
+	return true
 }
